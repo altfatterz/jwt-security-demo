@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: discovery-service
+
+  cloud:
+    config:
+      uri: ${CONFIG_URL:http://admin:admin@localhost:8888}
+      fail-fast: true
+
+

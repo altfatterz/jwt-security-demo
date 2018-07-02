@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: config-service
+
+  cloud:
+    config:
+      server:
+        # the server should configure itself from its own remote repository
+        bootstrap: true
+
+  profiles:
+    active: dev
+
+---
+spring:
+  profiles: dev
+  cloud:
+    config:
+      server:
+        git:
+          uri: file://${user.dir}/../jwt-security-demo-config

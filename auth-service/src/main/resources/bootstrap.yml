@@ -2,14 +2,13 @@ spring:
   application:
     name: auth-service
 
-  # using eureka first bootstrap - the app first locates the eureka-server, the eureka-server locates the config-server which gets the configuration
   cloud.config:
     discovery:
       enabled: true
-      service-id: config-server
+      service-id: config-service
     fail-fast: true
 
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL:http://admin:admin@localhost:8761/eureka/}
+      defaultZone: ${EUREKA_SERVICE_URL:http://admin:admin@localhost:8761/eureka/}

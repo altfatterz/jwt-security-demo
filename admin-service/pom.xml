@@ -36,7 +36,6 @@
             <version>${spring-boot-admin-server.version}</version>
         </dependency>
 
-
         <!-- Managing the services via Spring Cloud Discovery instead of Spring Boot Admin Client -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

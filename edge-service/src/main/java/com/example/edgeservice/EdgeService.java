@@ -2,11 +2,13 @@ package com.example.edgeservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
+@EnableZuulProxy
 @SpringBootApplication
-public class EdgeServiceApplication {
+public class EdgeService {
 
     public static void main(String[] args) {
-        SpringApplication.run(EdgeServiceApplication.class, args);
+        SpringApplication.run(EdgeService.class, args);
     }
 }

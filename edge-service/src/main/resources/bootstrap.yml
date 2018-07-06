@@ -1,20 +1,15 @@
 spring:
   application:
-    name: admin-service
+    name: edge-service
 
-  boot:
-    admin:
-      discovery:
-        ignored-services: admin-service
-
+  # using eureka first bootstrap - the app first locates the eureka-server, the eureka-server locates the config-server which gets the configuration
   cloud.config:
     discovery:
       enabled: true
-      service-id: config-service
+      service-id: config-server
     fail-fast: true
 
 eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_SERVER_URL:http://admin:admin@localhost:8761/eureka/}
-

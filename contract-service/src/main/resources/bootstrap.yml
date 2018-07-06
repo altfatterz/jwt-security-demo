@@ -1,11 +1,6 @@
 spring:
   application:
-    name: admin-service
-
-  boot:
-    admin:
-      discovery:
-        ignored-services: admin-service
+    name: contract-service
 
   cloud.config:
     discovery:
@@ -17,4 +12,3 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_SERVER_URL:http://admin:admin@localhost:8761/eureka/}
-

@@ -15,28 +15,25 @@ import java.io.IOException;
 
 public class JwtTokenFilter extends GenericFilterBean {
 
-    private JwtHelper jwtHelper;
+    private JwtService jwtService;
 
-    public JwtTokenFilter(JwtHelper jwtHelper) {
-        this.jwtHelper = jwtHelper;
+    public JwtTokenFilter(JwtService jwtService) {
+        this.jwtService = jwtService;
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        String token = jwtHelper.extractToken((HttpServletRequest) request);
+        String token = jwtService.getToken((HttpServletRequest) request);
 
-        boolean isTokenValid = false;
         try {
-            isTokenValid = jwtHelper.validateToken(token);
+            if (jwtService.isValidToken(token)) {
+                Authentication authentication = jwtService.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         } catch (JwtException e) {
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        }
-
-        if (isTokenValid) {
-            Authentication authentication = jwtHelper.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);

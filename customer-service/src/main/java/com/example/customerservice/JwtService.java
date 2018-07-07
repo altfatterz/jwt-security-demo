@@ -10,15 +10,15 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class JwtHelper {
+public class JwtService {
 
     private final JwtSecurityProperties jwtSecurityProperties;
 
-    public JwtHelper(JwtSecurityProperties jwtSecurityProperties) {
+    public JwtService(JwtSecurityProperties jwtSecurityProperties) {
         this.jwtSecurityProperties = jwtSecurityProperties;
     }
 
-    public String extractToken(HttpServletRequest request) {
+    public String getToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
@@ -26,7 +26,7 @@ public class JwtHelper {
         return null;
     }
 
-    public boolean validateToken(String token) {
+    public boolean isValidToken(String token) {
         if (StringUtils.isEmpty(token)) {
             throw new JwtException("missing jwt token");
         }

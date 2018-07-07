@@ -19,13 +19,12 @@ public class JwtWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .anyRequest().authenticated()
+                    .anyRequest().authenticated()
                 .and()
-                // There is no Set-Cookie header set like: Set-Cookie: JSESSIONID=FA8D9D63AC673210862275C8D36431E3; Path=/; HttpOnly
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().httpBasic()
+                    // There is no Set-Cookie header set like: Set-Cookie: JSESSIONID=FA8D9D63AC673210862275C8D36431E3; Path=/; HttpOnly
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new JwtTokenFilter(jwtHelper), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(new JwtTokenFilter(jwtHelper), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

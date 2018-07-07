@@ -1,13 +1,18 @@
 package com.example.customerservice;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtService {
@@ -34,11 +39,20 @@ public class JwtService {
         return true;
     }
 
-    private String getUsername(String token) {
-        return Jwts.parser().setSigningKey(jwtSecurityProperties.getToken().getSecret()).parseClaimsJws(token).getBody().getSubject();
+    public Authentication getAuthentication(String token) {
+        Claims claims = getClaims(token);
+        return new UsernamePasswordAuthenticationToken(claims.getSubject(), null, getAuthorities(claims));
     }
 
-    public Authentication getAuthentication(String token) {
-        return new UsernamePasswordAuthenticationToken(getUsername(token), token, null);
+    private Claims getClaims(String token) {
+        return Jwts.parser().setSigningKey(jwtSecurityProperties.getToken().getSecret()).parseClaimsJws(token).getBody();
     }
+
+    private List<GrantedAuthority> getAuthorities(Claims claims) {
+        List<String> authorities = claims.get("authorities", List.class);
+        return authorities.stream().map((role) -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+    }
+
+
+
 }

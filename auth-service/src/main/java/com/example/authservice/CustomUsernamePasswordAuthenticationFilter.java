@@ -37,7 +37,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
 
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse rsp, FilterChain chain, Authentication auth) {
-        String jwtToken = jwtTokenProvider.createJwtToken(auth.getName());
+        String jwtToken = jwtTokenProvider.createJwtToken(auth);
         rsp.addHeader("Authorization", "Bearer " + jwtToken);
     }
 

@@ -6,13 +6,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableConfigurationProperties(JwtSecurityProperties.class)
 public class CustomerService {
 
@@ -33,9 +37,16 @@ class Customer {
 @RestController
 class CustomerRestController {
 
-    @RequestMapping("/customers")
+    @GetMapping("/customers")
     public List<Customer> customers() {
         return Arrays.asList(new Customer("John", "Doe"));
     }
+
+    @GetMapping("/customers/{customerId}")
+    @Secured("ROLE_ADMIN")
+    public Customer customer(@PathVariable String customerId) {
+        return new Customer("Walter", "White");
+    }
+
 
 }

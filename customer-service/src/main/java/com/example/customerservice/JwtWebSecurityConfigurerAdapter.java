@@ -9,10 +9,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class JwtWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
-    private final JwtService jwtService;
+    private JwtSecurityProperties jwtSecurityProperties;
 
-    public JwtWebSecurityConfigurerAdapter(JwtService jwtService) {
-        this.jwtService = jwtService;
+    public JwtWebSecurityConfigurerAdapter(JwtSecurityProperties jwtSecurityProperties) {
+        this.jwtSecurityProperties = jwtSecurityProperties;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class JwtWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
                     // There is no Set-Cookie header set like: Set-Cookie: JSESSIONID=FA8D9D63AC673210862275C8D36431E3; Path=/; HttpOnly
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                    .addFilterBefore(new JwtTokenFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(new JwtTokenFilter(jwtSecurityProperties), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

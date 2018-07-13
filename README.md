@@ -93,3 +93,17 @@ Caused by: java.lang.NoSuchMethodException: com.example.jwt.filter.JwtHttpSecuri
 
 
 ```
+
+JWT vs OAuth
+
+- JWT is a type of token (is a token format for carrying claims) and OAuth is framework that describes how to distribute tokens
+- SAML assertions are similar to JWT claims
+- SON Web Tokens are an open, industry standard (https://tools.ietf.org/html/rfc7519) method for representing claims securely between two parties.
+- JWT can be used as an OAuth Bearer token
+- It is not possible to revoke JWT. They expire when they are marked to expire at creation time.
+- If you have to go to an external server to authenticate each API request and that call can be expensive, JWT can get you a better performance.
+- The flip side to having self validating tokens is any invalidation of these tokens will not have immediate effect. As a side effect, you are forced to have lower expiry times to these tokens ( may not be ideal in some cases)
+- very good explanation: https://community.apigee.com/questions/21139/jwt-vs-oauth.html
+
+
+

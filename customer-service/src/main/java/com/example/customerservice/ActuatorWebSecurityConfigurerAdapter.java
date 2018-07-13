@@ -11,9 +11,9 @@ public class ActuatorWebSecurityConfigurerAdapter extends WebSecurityConfigurerA
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/actuator/*")
+        http.antMatcher("/actuator/**")
                 .authorizeRequests()
-                .anyRequest().authenticated()
+                .anyRequest().hasRole("MANAGER")
                 .and()
                 .httpBasic();
     }

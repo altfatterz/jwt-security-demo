@@ -19,6 +19,7 @@ public class HttpSecurityConfig {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("user").password("{noop}password").roles("USER").build());
         manager.createUser(User.withUsername("admin").password("{noop}admin").roles("USER", "ADMIN").build());
+        manager.createUser(User.withUsername("manager").password("{noop}manager").roles("MANAGER").build());
         return manager;
     }
 
@@ -31,7 +32,7 @@ public class HttpSecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http.antMatcher("/actuator/**")
                     .authorizeRequests()
-                    .anyRequest().authenticated()
+                    .anyRequest().hasRole("MANAGER")
                     .and()
                     .httpBasic();
         }

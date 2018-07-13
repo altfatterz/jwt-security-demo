@@ -8,19 +8,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JwtTokenFilter extends GenericFilterBean {
+public class JwtTokenFilter extends OncePerRequestFilter {
 
     private JwtSecurityProperties jwtSecurityProperties;
 
@@ -29,19 +27,21 @@ public class JwtTokenFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
-            throws IOException, ServletException {
-        String token = obtainToken((HttpServletRequest) request);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        String token = obtainToken(request);
         try {
+            if (token == null) {
+                throw new JwtException("missing jwt token");
+            }
             Claims claims = obtainClaims(token);
             Authentication authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), "", getAuthorities(claims));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JwtException e) {
-            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            SecurityContextHolder.clearContext();
+            //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 
-        filterChain.doFilter(request, response);
+        chain.doFilter(request, response);
     }
 
     public String obtainToken(HttpServletRequest request) {

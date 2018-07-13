@@ -4,7 +4,7 @@ spring:
 
   cloud:
     config:
-      uri: ${CONFIG_SERVICE_URL:http://admin:admin@localhost:8888}
+      uri: ${CONFIG_SERVICE_URL:http://manager:manager@localhost:8888}
       fail-fast: true
 
 

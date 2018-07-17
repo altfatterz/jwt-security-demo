@@ -33,7 +33,7 @@ public class SecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http.antMatcher("/actuator/**")
                     .authorizeRequests()
-                    .anyRequest().authenticated()
+                    .anyRequest().hasRole("MANAGER")
                     .and()
                     .httpBasic();
         }

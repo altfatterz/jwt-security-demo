@@ -1,4 +1,4 @@
-package com.example.authservice;
+package com.example.authservice.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,14 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CustomUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JsonUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public CustomUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public JsonUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         setAuthenticationManager(authenticationManager);
+        setAuthenticationFailureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED));
         this.jwtTokenProvider = jwtTokenProvider;
     }
 

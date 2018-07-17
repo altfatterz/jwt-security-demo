@@ -1,18 +1,20 @@
 package com.example.authservice;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.authservice.jwt.JwtConfigurer;
+import com.example.authservice.jwt.JwtSecurityProperties;
+import com.example.authservice.jwt.JwtTokenProvider;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-@EnableWebSecurity
-public class HttpSecurityConfig {
+@Configuration
+public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService()  {
@@ -23,37 +25,35 @@ public class HttpSecurityConfig {
         return manager;
     }
 
-    // used by spring boot admin client see WebSecurityConfiguration.setFilterChainProxySecurityConfigurer
     @Configuration
     @Order(1)
-    public static class ActuatorWebSecurityConfig extends WebSecurityConfigurerAdapter {
+    static class ActuatorSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.antMatcher("/actuator/**")
                     .authorizeRequests()
-                    .anyRequest().hasRole("MANAGER")
+                    .anyRequest().authenticated()
                     .and()
                     .httpBasic();
         }
+
     }
 
-
     @Configuration
-    public static class LoginWebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @EnableConfigurationProperties(JwtSecurityProperties.class)
+    static class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
-        @Autowired
-        private JwtTokenProvider jwtTokenProvider;
+        private final JwtTokenProvider jwtTokenProvider;
+
+        public ApplicationSecurityConfig(JwtTokenProvider jwtTokenProvider) {
+            this.jwtTokenProvider = jwtTokenProvider;
+        }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http
-                    // otherwise 403, Could not verify the provided CSRF token because your session was not found.
-                    .csrf().disable()
-                    .addFilter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(), jwtTokenProvider))
-                    .authorizeRequests().anyRequest().authenticated();
+            http.apply(new JwtConfigurer(jwtTokenProvider));
         }
+
     }
-
-
 }

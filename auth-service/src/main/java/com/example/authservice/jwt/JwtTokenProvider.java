@@ -1,8 +1,7 @@
-package com.example.authservice;
+package com.example.authservice.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +12,11 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${security.jwt.token.secret}")
-    private String secret;
+    private JwtSecurityProperties jwtSecurityProperties;
 
-    @Value("${security.jwt.token.validity}")
-    private long validity;
+    public JwtTokenProvider(JwtSecurityProperties jwtSecurityProperties) {
+        this.jwtSecurityProperties = jwtSecurityProperties;
+    }
 
     public String createJwtToken(Authentication authentication) {
         Date now = new Date();
@@ -28,8 +27,8 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("authorities", authorities)
-                .setExpiration(new Date(now.getTime() + validity))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .setExpiration(new Date(now.getTime() + jwtSecurityProperties.getToken().getValidity()))
+                .signWith(SignatureAlgorithm.HS256, jwtSecurityProperties.getToken().getSecret())
                 .compact();
     }
 }

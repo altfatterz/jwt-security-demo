@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+
+security:
+  jwt:
+    token:
+      secret: s3cr3t
+      validity: 3600000

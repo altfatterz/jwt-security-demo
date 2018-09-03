@@ -1,4 +1,4 @@
-package com.example.customerservice;
+package com.example.customerservice.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;

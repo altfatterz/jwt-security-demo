@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.annotation.Secured;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableCircuitBreaker
 public class CustomerService {
 
     public static void main(String[] args) {
@@ -47,10 +49,10 @@ class Customer {
 @RestController
 class CustomerRestController {
 
-    private RestTemplate restTemplate;
+    private final ContractServiceClient contractServiceClient;
 
-    public CustomerRestController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public CustomerRestController(ContractServiceClient contractServiceClient) {
+        this.contractServiceClient = contractServiceClient;
     }
 
     @GetMapping("/customers")
@@ -61,8 +63,7 @@ class CustomerRestController {
     @GetMapping("/customers/{customerId}")
     @Secured("ROLE_ADMIN")
     public Customer customer(@PathVariable String customerId) {
-        String contract = restTemplate.getForObject("http://contract-service/contract", String.class);
-        return new Customer("Walter", "White", contract);
+        return new Customer("Walter", "White", contractServiceClient.getContract());
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.customerservice;
+package com.example.customerservice.security;
 
 import com.example.jwt.filter.JwtSecurityProperties;
 import org.springframework.context.annotation.Configuration;

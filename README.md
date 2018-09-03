@@ -56,6 +56,7 @@ X-XSS-Protection: 1; mode=block
 
 ```
 
+`/customers/{customerId}` calls `contract-service` propagating the JWT token
 
 ```bash
 http :8080/customers/123 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImV4cCI6MTUzMTE1OTkyNn0.hCdwOQIxd8x-_Yzp8XVfiUKUqtK66wqs06jfi-pNyGw'
@@ -72,6 +73,7 @@ X-Frame-Options: DENY
 X-XSS-Protection: 1; mode=block
 
 {
+    "contract": "best contract",
     "firstName": "Walter",
     "lastName": "White"
 }

@@ -2,12 +2,11 @@ spring:
   application:
     name: customer-service
 
-  cloud:
-    config:
-      discovery:
-        enabled: true
-        service-id: config-service
-      fail-fast: true
+  cloud.config:
+    discovery:
+      enabled: true
+      service-id: config-service
+    fail-fast: true
 
 eureka:
   client:

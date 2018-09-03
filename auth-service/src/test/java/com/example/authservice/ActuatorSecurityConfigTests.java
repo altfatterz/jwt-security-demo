@@ -37,7 +37,7 @@ public class ActuatorSecurityConfigTests {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "MANAGER")
     public void authorizedAccessActuator() throws Exception {
         mvc.perform(get("/actuator")).andExpect(status().isOk());
     }

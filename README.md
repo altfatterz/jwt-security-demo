@@ -79,6 +79,49 @@ X-XSS-Protection: 1; mode=block
 }
 ```
 
+-----------------------------------------------------------------
+
+access the customer without the `auth-service` since the `edge-service` can create the JWT token
+
+```
+http :8080/customers
+
+HTTP/1.1 200
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Content-Type: application/json;charset=UTF-8
+Date: Thu, 06 Sep 2018 08:27:40 GMT
+Expires: 0
+Pragma: no-cache
+Set-Cookie: JSESSIONID=572A2998B49018157A29D5C816019E30; Path=/; HttpOnly
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+
+[
+    {
+        "contract": "hello",
+        "firstName": "John",
+        "lastName": "Doe"
+    }
+]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ```
 breaking point here: AbstractConfiguredSecurityBuilder.init()
 

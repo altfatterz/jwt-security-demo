@@ -9,7 +9,17 @@ spring:
       service-id: config-service
     fail-fast: true
 
+
 eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_SERVICE_URL:http://manager:manager@localhost:8761/eureka/}
+
+# providing details in order to create the JWT token in the gateway
+security:
+  jwt:
+    subject: abc123
+    issuer: example.com
+    audience: example
+    secret: s3cr3t
+    authorities: ROLE_USER, ROLE_ADMIN

@@ -12,8 +12,9 @@ public class JWTConfiguration {
         this.jwtSecurityProperties = jwtSecurityProperties;
     }
 
-    @Bean
-    public JWTZuulFilter jwtZuulFilter() {
-        return new JWTZuulFilter(jwtSecurityProperties);
-    }
+    // used to generate a JWT token
+//    @Bean
+//    public JWTZuulFilter jwtZuulFilter() {
+//        return new JWTZuulFilter(jwtSecurityProperties);
+//    }
 }

@@ -6,7 +6,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,12 +20,12 @@ public class JwtTokenProvider {
     public String createJwtToken(Authentication authentication) {
         Date now = new Date();
 
-        List<String> authorities = authentication.getAuthorities().stream().map(a -> a.getAuthority())
-                .collect(Collectors.toList());
+        String authoritiesCommaSeparated = authentication.getAuthorities().stream().map(a -> a.getAuthority())
+                .collect(Collectors.joining(","));
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim("authorities", authorities)
+                .claim("authorities", authoritiesCommaSeparated)
                 .setExpiration(new Date(now.getTime() + jwtSecurityProperties.getToken().getValidity()))
                 .signWith(SignatureAlgorithm.HS256, jwtSecurityProperties.getToken().getSecret())
                 .compact();

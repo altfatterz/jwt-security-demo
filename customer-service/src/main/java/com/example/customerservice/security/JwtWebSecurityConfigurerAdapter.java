@@ -14,6 +14,7 @@ public class JwtWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .anyRequest().authenticated()
+                .and().httpBasic() // needed otherwise it returns 403 for any user
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().apply(jwt());
     }

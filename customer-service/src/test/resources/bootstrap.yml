@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+eureka:
+  client:
+    enabled: false
+
+security:
+  jwt:
+    token:
+      secret: s3cr3t
